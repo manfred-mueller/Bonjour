@@ -31,6 +31,13 @@ jobs:
           name: Bonjour64
           path: Bonjour64.msi
 
+      - name: Create a tag from GitHub Run ID
+        run: |
+          TAG_NAME="run-${{ github.run_id }}"
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
