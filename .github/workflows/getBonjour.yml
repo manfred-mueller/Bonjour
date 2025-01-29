@@ -31,7 +31,12 @@ jobs:
           name: Bonjour64
           path: Bonjour64.msi
 
-      - name: Create a tag from GitHub Run ID
+      - name: Set up Git user
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Create and push a tag from GitHub Run ID
         run: |
           TAG_NAME="run-${{ github.run_id }}"
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
