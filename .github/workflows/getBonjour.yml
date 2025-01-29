@@ -1,0 +1,39 @@
+name: Extract Bonjour64
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  extract-bonjour:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install required tools
+        run: |
+          sudo apt update
+          sudo apt install -y p7zip-full cabextract msitools
+
+      - name: Download iTunes installer
+        run: wget https://www.apple.com/itunes/download/win64/ -O iTunes64.exe
+
+      - name: Extract Bonjour64.msi from iTunes installer
+        run: 7z e iTunes64.exe Bonjour64.msi -y
+
+      - name: Upload Bonjour64.msi as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bonjour64
+          path: Bonjour64.msi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Bonjour64.msi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
