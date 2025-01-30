@@ -30,7 +30,7 @@ jobs:
         run: |
           VERSION=$(msiinfo export Bonjour64.msi Property | awk -F'\t' '$1 == "ProductVersion" {print $2}' | tr -d '\r')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          NEW_NAME="Bonjour-${VERSION}.msi"
+          NEW_NAME="Bonjour64-${VERSION}.msi"
           mv Bonjour64.msi "$NEW_NAME"
           echo "NEW_NAME=$NEW_NAME" >> $GITHUB_ENV
 
