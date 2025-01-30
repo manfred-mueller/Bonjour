@@ -25,22 +25,25 @@ jobs:
       - name: Extract Bonjour64.msi from iTunes installer
         run: 7z e iTunes64.exe Bonjour64.msi -y
 
-      - name: Extract version from Bonjour64.msi
+      - name: Extract version from Bonjour64.msi and rename file
         id: extract_version
         run: |
           VERSION=$(msiinfo export Bonjour64.msi Property | awk -F'\t' '$1 == "ProductVersion" {print $2}')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          NEW_NAME="Bonjour64-${VERSION}.msi"
+          mv Bonjour64.msi "$NEW_NAME"
+          echo "NEW_NAME=$NEW_NAME" >> $GITHUB_ENV
 
-      - name: Upload Bonjour64.msi as artifact
+      - name: Upload renamed Bonjour MSI as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Bonjour64
-          path: Bonjour64.msi
+          name: Bonjour-${{ env.VERSION }}
+          path: ${{ env.NEW_NAME }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.VERSION }}
-          files: Bonjour64.msi
+          tag_name: v${{ env.VERSION }}
+          files: ${{ env.NEW_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
