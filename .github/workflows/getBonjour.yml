@@ -37,7 +37,7 @@ jobs:
       - name: Upload renamed Bonjour MSI as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Bonjour-${{ env.VERSION }}
+          name: Bonjour64-${{ env.VERSION }}
           path: ${{ env.NEW_NAME }}
 
       - name: Create GitHub Release
